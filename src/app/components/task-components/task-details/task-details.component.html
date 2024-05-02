@@ -1,0 +1,125 @@
+<mat-drawer-container class="task-details-container">
+  <div *ngIf="selectedTask" class="task-details">
+    <div class="header">
+      <h3>{{ editing ? 'Edit Task' : 'Task Details' }}</h3>
+      <button (click)="onEditTask()" *ngIf="!editing" color="primary" mat-icon-button>
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <form (ngSubmit)="saveTaskChanges()" *ngIf="editing" [formGroup]="taskForm" class="edit-form">
+      <mat-form-field class="full-width">
+        <mat-label>Title</mat-label>
+        <input formControlName="title" matInput placeholder="Title">
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea formControlName="description" matInput placeholder="Description"></textarea>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>
+          Date
+          <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        </mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input formControlName="start" matStartDate placeholder="Start date">
+          <input formControlName="end" matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Project</mat-label>
+        <input formControlName="project" matInput placeholder="Project">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="priority" placeholder="Priority">
+          <mat-option value="low">Low</mat-option>
+          <mat-option value="medium">Medium</mat-option>
+          <mat-option value="high">High</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Совместная работа</mat-label>
+        <mat-select formControlName="collaboration" multiple>
+          <mat-option *ngFor="let user of allUsers" [value]="user.id">
+            {{ user.username }}
+          </mat-option>
+
+        </mat-select>
+      </mat-form-field>
+      <div class="buttons">
+        <button color="primary" mat-raised-button type="submit">Save</button>
+        <button (click)="cancelEditing()" mat-button>Cancel</button>
+      </div>
+    </form>
+    <div *ngIf="!editing" class="details-container">
+      <mat-card-content class="card-content-flex">
+        <mat-list>
+          <!-- Заголовок задачи -->
+          <mat-list-item class="list-item-spaced">
+            <strong>Заголовок задачи:</strong>
+            <div>{{ selectedTask.title }}</div>
+          </mat-list-item>
+
+          <!-- Описание задачи -->
+          <mat-list-item class="list-item-spaced">
+            <strong>Описание:</strong>
+            <div>{{ selectedTask.description }}</div>
+          </mat-list-item>
+
+          <!-- Дата выполнения -->
+          <mat-list-item class="list-item-spaced">
+            <strong>Дата:</strong>
+            <div>
+              {{
+                (selectedTask.date.start | date: 'dd/MM/yyyy') || 'Нет начальной даты'
+              }} - {{
+                (selectedTask.date.end | date: 'dd/MM/yyyy') || 'Нет конечной даты'
+              }}
+            </div>
+          </mat-list-item>
+
+          <!-- Проект -->
+          <mat-list-item class="list-item-spaced">
+            <strong>Проект:</strong>
+            <div>{{ selectedTask.project }}</div>
+          </mat-list-item>
+
+          <!-- Приоритет -->
+          <mat-list-item class="list-item-spaced">
+            <div style="height: 20px;"></div>
+            <strong>Приоритет:</strong>
+            <div [ngClass]="{
+                'high-priority': selectedTask.priority === 'Высокий',
+                'medium-priority': selectedTask.priority === 'Средний',
+                'low-priority': selectedTask.priority === 'Низкий'
+              }"
+            >
+              {{ selectedTask.priority }}
+            </div>
+            <div style="height: 10px;"></div>
+          </mat-list-item>
+
+          <!-- Совместная работа -->
+          <mat-list-item class="list-item-spaced">
+            <div style="height: 40px;"></div>
+            <strong>Совместная работа:</strong>
+            <div style="margin-top: 5px">
+              <ng-container *ngIf="selectedTask.collaboration && selectedTask.collaboration.length > 0">
+                <ng-container *ngFor="let userId of selectedTask.collaboration">
+                  <mat-chip matTooltip="{{ getUserById(userId)?.username }}">
+                    {{ getInitials(getUserById(userId)?.username ?? '') }}
+                  </mat-chip>
+                </ng-container>
+              </ng-container>
+              <div *ngIf="!selectedTask.collaboration || selectedTask.collaboration.length === 0">
+                В соло
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </div>
+
+  </div>
+</mat-drawer-container>

@@ -1,0 +1,32 @@
+<div class="component-wrapper">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Регистрация</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onRegister()" [formGroup]="registerForm" class="register-form">
+        <mat-form-field>
+          <mat-label>Имя пользователя</mat-label>
+          <input formControlName="username" matInput required>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Пароль</mat-label>
+          <input formControlName="password" matInput required type="password">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Подтвердить пароль</mat-label>
+          <input formControlName="confirmPassword" matInput required type="password">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button [disabled]="!registerForm.valid" color="primary" mat-raised-button type="submit">
+            Зарегистрироваться
+          </button>
+          <a mat-raised-button routerLink="/login">Войти</a>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

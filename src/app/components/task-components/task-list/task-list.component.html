@@ -1,0 +1,91 @@
+<app-task-filter (filtered)="handleFilteredTasks($event)" class="filter-container"></app-task-filter>
+
+<mat-drawer-container class="task-list-container" hasBackdrop="false">
+  
+  <mat-drawer #drawer class="custom-drawer" position="end">
+    <button (click)="closeDrawer()" class="close-button" mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+    <app-task-details [selectedTask]="selectedTask"></app-task-details>
+  </mat-drawer>
+  <section>
+    <mat-table [dataSource]="filteredTasks" class="tasks-table">
+
+      <!-- статус -->
+      <ng-container matColumnDef="completed">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let task" class="checkbox-cell">
+          <div (click)="$event.stopPropagation()">
+            <mat-checkbox (change)="toggleCompleted(task)" [checked]="task.completed"></mat-checkbox>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <!-- название -->
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Название</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{ task.title }}</mat-cell>
+      </ng-container>
+
+      <!-- проекты -->
+      <ng-container matColumnDef="project">
+        <mat-header-cell *matHeaderCellDef>Проект</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{ task.project }}</mat-cell>
+      </ng-container>
+
+      <!-- приоритет -->
+      <ng-container matColumnDef="priority">
+        <mat-header-cell *matHeaderCellDef>Приоритет</mat-header-cell>
+        <mat-cell *matCellDef="let task">{{ task.priority }}</mat-cell>
+      </ng-container>
+
+      <!-- коллаб -->
+      <ng-container matColumnDef="collaboration">
+        <mat-header-cell *matHeaderCellDef>Совместная работа</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          <ng-container *ngIf="task.collaboration && task.collaboration.length > 0">
+            <ng-container *ngFor="let userId of task.collaboration">
+              <mat-chip matTooltip="{{ getUserById(userId)?.username }}">
+                {{ getInitials(getUserById(userId)?.username ?? '') }}
+              </mat-chip>
+            </ng-container>
+          </ng-container>
+          <span *ngIf="!task.collaboration || task.collaboration.length === 0">
+            В соло
+          </span>
+        </mat-cell>
+      </ng-container>
+
+
+      <!-- Время) -->
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef>Дата</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          {{ task.date | datePipe }}
+        </mat-cell>
+      </ng-container>
+
+      <!-- удалить -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Удалить</mat-header-cell>
+        <mat-cell *matCellDef="let task">
+          <div (click)="$event.stopPropagation()">
+            <button (click)="deleteTask(task.id)" color="primary" mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row
+        *matHeaderRowDef="['completed', 'title', 'project', 'priority', 'collaboration', 'date', 'actions']"
+      >
+      </mat-header-row>
+      <mat-row
+        (click)="openDrawer(task)"
+        *matRowDef="let task; columns: ['completed', 'title', 'project', 'priority', 'collaboration', 'date', 'actions']"
+      ></mat-row>
+
+    </mat-table>
+  </section>
+</mat-drawer-container>

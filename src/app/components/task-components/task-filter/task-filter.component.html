@@ -1,0 +1,51 @@
+<div class="container">
+  <form [formGroup]="filterForm" class="filter-container">
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Статус</mat-label>
+        <mat-select formControlName="completed">
+          <mat-option value="">Все</mat-option>
+          <mat-option [value]="true">Завершено</mat-option>
+          <mat-option [value]="false">Не завершено</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Исполнитель</mat-label>
+        <input formControlName="executor" matInput placeholder="Исполнитель">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+        <mat-label>Приоритет</mat-label>
+        <mat-select formControlName="priority">
+          <mat-option value="">All</mat-option>
+          <mat-option value="Высокий">Высокий</mat-option>
+          <mat-option value="Средний">Средний</mat-option>
+          <mat-option value="Низкий">Низкий</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline" class="flex-form-field">
+        <mat-label>Введите диапазон дат</mat-label>
+        <mat-date-range-input [rangePicker]="picker" class="flex-date-range" formGroupName="deadline">
+          <input formControlName="start" matStartDate placeholder="Начальная дата"/>
+          <input formControlName="end" matEndDate placeholder="Конечная дата"/>
+        </mat-date-range-input>
+        <mat-datepicker-toggle [for]="picker" matSuffix style="position: relative; left: -1px"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <button (click)="resetDates()" class="buttonX" matSuffix>
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+
+    </div>
+  </form>
+
+</div>

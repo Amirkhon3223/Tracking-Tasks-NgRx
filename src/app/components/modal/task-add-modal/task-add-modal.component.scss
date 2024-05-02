@@ -1,0 +1,20 @@
+.task-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-form-actions {
+  display: flex;
+  justify-content: flex-end;
+}

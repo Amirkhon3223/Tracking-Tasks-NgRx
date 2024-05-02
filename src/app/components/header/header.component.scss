@@ -1,0 +1,42 @@
+.app-title {
+  font-weight: bold;
+  font-size: 1.5em;
+  align-items: center;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+.mat-toolbar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Центрируем по вертикали */
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.add-task-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-left: 20px;
+}
+
+.add-task-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.mat-icon {
+  font-size: 24px;
+}
+
+.mat-toolbar {
+  padding: 0 16px;
+}

@@ -1,0 +1,92 @@
+.task-details-container {
+  height: 100vh;
+  font-size: 18px;
+}
+
+.task-details {
+  display: flex;
+  flex-direction: column;
+  height: 100hv;
+  padding: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.header h1 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.edit-form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: none;
+}
+
+.card-content-flex {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.list-item-spaced {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  overflow: visible;
+}
+
+.high-priority {
+  color: red;
+  font-weight: 600;
+  background: black;
+  padding: 10px;
+  width: fit-content;
+  margin-top: 5px;
+}
+
+.medium-priority {
+  color: orange;
+  font-weight: 600;
+  background: black;
+  padding: 10px;
+  width: fit-content;
+  margin-top: 5px;
+}
+
+.low-priority {
+  color: green;
+  font-weight: 600;
+  background: black;
+  padding: 10px;
+  width: fit-content;
+  margin-top: 5px;
+}
+
+
+p {
+  margin-top: 5px;
+}

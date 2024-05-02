@@ -1,0 +1,62 @@
+.tasks-table mat-row:not(mat-header-row) mat-cell,
+.completed-tasks-table mat-row:not(mat-header-row) mat-cell {
+  background-color: #ffffff;
+}
+
+.tasks-table mat-row:not(mat-header-row):hover mat-cell,
+.completed-tasks-table mat-row:not(mat-header-row):hover mat-cell {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.completed-tasks-table mat-row:not(mat-header-row) mat-cell {
+  background-color: #f2f2f2;
+}
+
+.completed-tasks-table mat-row:not(mat-header-row):hover mat-cell {
+  background-color: #e0e0e0;
+}
+
+.tasks-table, .completed-tasks-table {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+mat-drawer {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
+  will-change: auto;
+}
+
+.task-details {
+  padding: 10px;
+}
+
+.custom-drawer {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+}
+
+.close-button {
+  align-self: flex-end;
+  margin: 8px;
+  background-color: transparent;
+  color: #555;
+}
+
+.close-button:hover {
+  color: #f00;
+}
+
+.filter-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
