@@ -4,10 +4,10 @@ import { AppRoutingModule } from './app-routing.module';
 
 // Components
 import { AppComponent } from './app.component';
-import { TaskListComponent } from './components/task-components/task-list/task-list.component';
-import { TaskDetailsComponent } from './components/task-components/task-details/task-details.component';
-import { TaskFilterComponent } from './components/task-components/task-filter/task-filter.component';
-import { HeaderComponent } from './components/header/header.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
+import { TaskDetailsComponent } from './components/task-details/task-details.component';
+import { TaskFilterComponent } from './features/task-filter/task-filter.component';
+import { HeaderComponent } from './shared/header/header.component';
 
 
 // NgRx Imports
@@ -26,7 +26,7 @@ import { DatePipe } from './pipes/date.pipe';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TaskAddModalComponent } from './components/modal/task-add-modal/task-add-modal.component';
+import { TaskAddModalComponent } from './ui/modal/task-add/task-add-modal.component';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import {
   MatDatepicker,
@@ -59,12 +59,13 @@ import { MatDrawer, MatDrawerContainer, MatSidenavModule } from '@angular/materi
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatRadioButton } from '@angular/material/radio';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
+import { LoginComponent } from './pages/auth/login/login.component';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatChip } from '@angular/material/chips';
 import { HomeComponent } from './pages/home/home.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -136,6 +137,7 @@ import { HomeComponent } from './pages/home/home.component';
     MatCardContent,
     MatTooltip,
     MatChip,
+    MatSnackBarModule
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'en-US'},

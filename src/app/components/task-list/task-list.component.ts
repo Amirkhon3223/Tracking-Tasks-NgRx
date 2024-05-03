@@ -1,17 +1,16 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Observable, Subject, takeUntil } from 'rxjs';
-
-import { Task } from '../../../models/task.model';
+import { Task } from '../../models/task.model';
+import { User } from '../../models/user.model';
+import { TaskService } from '../../services/task/task.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { UserService } from '../../services/user/user.service';
 //NgRx
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app-state';
-import { selectAllTasks } from '../../../store/tasks/tasks.selector';
-import { loadTasks, updateTask } from '../../../store/tasks/tasks.actions';
-import { TaskService } from '../../../services/task/task.service';
-import { MatDrawer } from '@angular/material/sidenav';
-import { AuthService } from '../../../services/user/auth.service';
-import { User } from '../../../models/user.model';
-import { UserService } from '../../../services/user/user.service';
+import { AppState } from '../../store/app-state';
+import { selectAllTasks } from '../../store/tasks/tasks.selector';
+import { loadTasks, updateTask } from '../../store/tasks/tasks.actions';
 
 @Component({
   selector: 'app-task-list',
@@ -26,26 +25,31 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   @ViewChild('drawer') drawer: MatDrawer | undefined;
 
-  private destroy$ = new Subject<void>();
   private allUsers: User[] = [];
 
+  private readonly destroy$ = new Subject<void>();
+
+  private readonly taskService = inject(TaskService);
+  private authService = inject(AuthService);
+  private readonly userService = inject(UserService);
+
   constructor(
-    private store: Store<AppState>,
-    private _taskService: TaskService,
-    private _authService: AuthService,
-    private _userService: UserService
+    private readonly store: Store<AppState>,
   ) {
-    this.tasks$ = this.store.select(selectAllTasks);
+    const userId = this.authService.getCurrentUser()?.id;
+    if (userId) {
+      this.tasks$ = this.store.select(selectAllTasks, { userId });
+    }
   }
 
   ngOnInit(): void {
-    const currentUser = this._authService.getCurrentUser();
+    const currentUser = this.authService.getCurrentUser();
 
     if (currentUser) {
       this.store.dispatch(loadTasks());
     }
 
-    this._userService.getUsers().subscribe(users => {
+    this.userService.getUsers().pipe(takeUntil(this.destroy$)).subscribe(users => {
       this.allUsers = users;
     });
 
@@ -53,18 +57,11 @@ export class TaskListComponent implements OnInit, OnDestroy {
       this.filteredTasks = tasks;
     });
 
-    document.addEventListener('keydown', this.onKeyDown.bind(this));
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    document.removeEventListener('keydown', this.onKeyDown.bind(this));
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   getInitials(fullName: string): string {
     const nameParts = fullName.split(' ');
-
     if (nameParts.length >= 2) {
       return `${nameParts[0][0]}${nameParts[1][0]}`;
     } else {
@@ -86,10 +83,10 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   deleteTask(taskId: string): void {
-    const userId = this._authService.getCurrentUser()?.id ?? '';
-    this._taskService.deleteTask(taskId, userId).subscribe(() => {
-      this.store.dispatch(loadTasks());
-    });
+    const userId = this.authService.getCurrentUser()?.id ?? '';
+    this.taskService.deleteTask(taskId, userId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.store.dispatch(loadTasks()));
   }
 
   openDrawer(task: Task): void {
@@ -105,9 +102,15 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
-  onKeyDown(event: KeyboardEvent): void {
+  private onKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Escape' && this.drawer && this.drawer.opened) {
       this.drawer.close();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 }

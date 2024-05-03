@@ -13,16 +13,15 @@ export class TaskService {
 
   getTasks(userId: string): Observable<Task[]> {
     const tasks = this.getItem<Task[]>('tasks') || [];
-    // Возвращаем задачи, где текущий пользователь - владелец или упомянут в collaboration
-    const accessibleTasks = tasks.filter(task =>
-      task.userId === userId || task.collaboration.includes(userId)
+    const accessibleTasks = tasks.filter(
+      task => task.userId === userId || task.collaboration.includes(userId)
     );
     return of(accessibleTasks).pipe(delay(100));
   }
 
   addTask(task: Task, userId: string): Observable<{ tasks: Task[] }> {
     const tasks = this.getItem<Task[]>('tasks') || [];
-    const newTask = {...task, id: uuid(), userId};
+    const newTask = {...task, id: uuid(), userId, collaboration: task.collaboration || []};
     tasks.push(newTask);
     this.setItem('tasks', tasks);
     return of({tasks}).pipe(delay(100));
@@ -36,7 +35,7 @@ export class TaskService {
   }
 
   updateTask(task: Task, userId: string): Observable<Task[]> {
-    let tasks = this.getItem<Task[]>('tasks') || [];
+    const tasks = this.getItem<Task[]>('tasks') || [];
     const index = tasks.findIndex(t => t.id === task.id && t.userId === userId);
     if (index !== -1) {
       tasks[index] = {...task, userId};
@@ -50,7 +49,7 @@ export class TaskService {
     return item ? JSON.parse(item) : null;
   }
 
-  setItem(key: string, value: any): void {
+  setItem(key: string, value: Task[]): void {
     localStorage.setItem(key, JSON.stringify(value));
   }
 }

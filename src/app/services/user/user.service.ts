@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { User } from '../../models/user.model';
 import { delay, Observable, of } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth/auth.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -10,9 +10,9 @@ import { map } from 'rxjs/operators';
 export class UserService {
   private users: User[] = [];
 
-  constructor(
-    private _authService: AuthService
-  ) {
+  private _authService = inject(AuthService);
+
+  constructor() {
   }
 
   getUsers(): Observable<User[]> {
